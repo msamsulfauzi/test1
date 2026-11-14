@@ -1,0 +1,238 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "Portal user account for Admin Pengguna, PIC, and Peserta",
+      "type": "object",
+      "properties": {
+        "id": { "type": "number" },
+        "uid": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "passwordHash": { "type": "string" },
+        "fullName": { "type": "string" },
+        "phone": { "type": "string" },
+        "jabatan": { "type": "string" },
+        "lpseLocation": { "type": "string" },
+        "role": { "type": "string", "enum": ["admin", "pic", "peserta"] },
+        "accountStatus": { "type": "string", "enum": ["pending", "approved", "rejected"] },
+        "verifiedBy": { "type": "number" },
+        "verifiedAt": { "type": "string", "format": "date-time" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "uid", "email", "fullName", "role", "accountStatus", "createdAt"]
+    },
+    "LpseLocation": {
+      "title": "LpseLocation",
+      "description": "Master list of LPSE locations",
+      "type": "object",
+      "properties": {
+        "id": { "type": "number" },
+        "name": { "type": "string" },
+        "province": { "type": "string" },
+        "isActive": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "name", "isActive", "createdAt"]
+    },
+    "Agenda": {
+      "title": "Agenda",
+      "description": "Bimtek training agenda schedule",
+      "type": "object",
+      "properties": {
+        "id": { "type": "number" },
+        "title": { "type": "string" },
+        "registrationOpenAt": { "type": "string", "format": "date-time" },
+        "registrationCloseAt": { "type": "string", "format": "date-time" },
+        "startDate": { "type": "string", "format": "date-time" },
+        "endDate": { "type": "string", "format": "date-time" },
+        "location": { "type": "string" },
+        "materialTitle": { "type": "string" },
+        "speakers": { "type": "string" },
+        "description": { "type": "string" },
+        "createdBy": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "title", "registrationOpenAt", "registrationCloseAt", "startDate", "endDate", "location", "createdAt"]
+    },
+    "AgendaRegistration": {
+      "title": "AgendaRegistration",
+      "description": "Participant registration to a specific Bimtek agenda pending PIC approval",
+      "type": "object",
+      "properties": {
+        "id": { "type": "number" },
+        "agendaId": { "type": "number" },
+        "userId": { "type": "number" },
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected"] },
+        "approvedBy": { "type": "number" },
+        "approvedAt": { "type": "string", "format": "date-time" },
+        "notes": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "agendaId", "userId", "status", "createdAt"]
+    },
+    "Question": {
+      "title": "Question",
+      "description": "Weighted Pretest or Posttest question",
+      "type": "object",
+      "properties": {
+        "id": { "type": "number" },
+        "testType": { "type": "string", "enum": ["pretest", "posttest"] },
+        "questionText": { "type": "string" },
+        "optionsJson": { "type": "array" },
+        "correctIndex": { "type": "number" },
+        "weight": { "type": "number" },
+        "orderIndex": { "type": "number" },
+        "isActive": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "testType", "questionText", "optionsJson", "correctIndex", "weight", "orderIndex", "isActive", "createdAt"]
+    },
+    "BimtekStage": {
+      "title": "BimtekStage",
+      "description": "Configurable participant workflow stage",
+      "type": "object",
+      "properties": {
+        "id": { "type": "number" },
+        "stageKey": { "type": "string" },
+        "title": { "type": "string" },
+        "stageType": { "type": "string" },
+        "dayNumber": { "type": "number" },
+        "speakerNumber": { "type": "number" },
+        "orderIndex": { "type": "number" },
+        "isRequired": { "type": "boolean" },
+        "isActive": { "type": "boolean" },
+        "description": { "type": "string" }
+      },
+      "required": ["id", "stageKey", "title", "stageType", "dayNumber", "orderIndex", "isRequired", "isActive"]
+    },
+    "Attendance": {
+      "title": "Attendance",
+      "description": "Daily participant attendance log",
+      "type": "object",
+      "properties": {
+        "id": { "type": "number" },
+        "agendaId": { "type": "number" },
+        "userId": { "type": "number" },
+        "dayNumber": { "type": "number" },
+        "attendanceDate": { "type": "string" },
+        "checkedInAt": { "type": "string", "format": "date-time" },
+        "notes": { "type": "string" }
+      },
+      "required": ["id", "agendaId", "userId", "dayNumber", "attendanceDate", "checkedInAt"]
+    },
+    "TestSubmission": {
+      "title": "TestSubmission",
+      "description": "Pretest and Posttest submission with score",
+      "type": "object",
+      "properties": {
+        "id": { "type": "number" },
+        "agendaId": { "type": "number" },
+        "userId": { "type": "number" },
+        "testType": { "type": "string", "enum": ["pretest", "posttest"] },
+        "answersJson": { "type": "object" },
+        "score": { "type": "number" },
+        "maxScore": { "type": "number" },
+        "submittedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "agendaId", "userId", "testType", "score", "maxScore", "submittedAt"]
+    },
+    "Evaluation": {
+      "title": "Evaluation",
+      "description": "Speaker or committee evaluation rating",
+      "type": "object",
+      "properties": {
+        "id": { "type": "number" },
+        "agendaId": { "type": "number" },
+        "userId": { "type": "number" },
+        "targetType": { "type": "string", "enum": ["speaker", "committee"] },
+        "speakerNumber": { "type": "number" },
+        "speakerName": { "type": "string" },
+        "ratingMastery": { "type": "number" },
+        "ratingDelivery": { "type": "number" },
+        "ratingMaterial": { "type": "number" },
+        "comments": { "type": "string" },
+        "submittedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "agendaId", "userId", "targetType", "ratingMastery", "ratingDelivery", "ratingMaterial", "submittedAt"]
+    },
+    "DocumentUpload": {
+      "title": "DocumentUpload",
+      "description": "Participant document upload archived in Google Drive",
+      "type": "object",
+      "properties": {
+        "id": { "type": "number" },
+        "agendaId": { "type": "number" },
+        "userId": { "type": "number" },
+        "docType": { "type": "string", "enum": ["komitmen", "tugas"] },
+        "fileName": { "type": "string" },
+        "mimeType": { "type": "string" },
+        "fileSize": { "type": "number" },
+        "driveFileId": { "type": "string" },
+        "driveWebViewLink": { "type": "string" },
+        "storageMode": { "type": "string" },
+        "uploadedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "agendaId", "userId", "docType", "fileName", "uploadedAt"]
+    },
+    "SheetSyncLog": {
+      "title": "SheetSyncLog",
+      "description": "Google Sheets sync history record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "number" },
+        "spreadsheetId": { "type": "string" },
+        "spreadsheetUrl": { "type": "string" },
+        "spreadsheetTitle": { "type": "string" },
+        "syncedBy": { "type": "number" },
+        "syncedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "spreadsheetId", "spreadsheetUrl", "spreadsheetTitle", "syncedAt"]
+    }
+  },
+  "firestore": {
+    "/portal_data/{bridgeKey}/users/{docId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "Portal user accounts"
+    },
+    "/portal_data/{bridgeKey}/lpse_locations/{docId}": {
+      "schema": { "$ref": "#/entities/LpseLocation" },
+      "description": "LPSE locations master list"
+    },
+    "/portal_data/{bridgeKey}/agendas/{docId}": {
+      "schema": { "$ref": "#/entities/Agenda" },
+      "description": "Bimtek agendas"
+    },
+    "/portal_data/{bridgeKey}/agenda_registrations/{docId}": {
+      "schema": { "$ref": "#/entities/AgendaRegistration" },
+      "description": "Participant agenda registrations"
+    },
+    "/portal_data/{bridgeKey}/questions/{docId}": {
+      "schema": { "$ref": "#/entities/Question" },
+      "description": "Pretest and posttest questions"
+    },
+    "/portal_data/{bridgeKey}/bimtek_stages/{docId}": {
+      "schema": { "$ref": "#/entities/BimtekStage" },
+      "description": "Configurable participant stages"
+    },
+    "/portal_data/{bridgeKey}/attendances/{docId}": {
+      "schema": { "$ref": "#/entities/Attendance" },
+      "description": "Participant daily attendances"
+    },
+    "/portal_data/{bridgeKey}/test_submissions/{docId}": {
+      "schema": { "$ref": "#/entities/TestSubmission" },
+      "description": "Participant test submissions"
+    },
+    "/portal_data/{bridgeKey}/evaluations/{docId}": {
+      "schema": { "$ref": "#/entities/Evaluation" },
+      "description": "Speaker and committee evaluations"
+    },
+    "/portal_data/{bridgeKey}/document_uploads/{docId}": {
+      "schema": { "$ref": "#/entities/DocumentUpload" },
+      "description": "Participant uploads linked to Google Drive"
+    },
+    "/portal_data/{bridgeKey}/sheet_sync_logs/{docId}": {
+      "schema": { "$ref": "#/entities/SheetSyncLog" },
+      "description": "Google Sheets sync history"
+    }
+  }
+}

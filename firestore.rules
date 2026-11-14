@@ -1,0 +1,51 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function hasValidBridgeKey(bridgeKey) {
+      return bridgeKey is string
+        && bridgeKey.size() == 48
+        && hashing.sha256(bridgeKey.toUtf8()).toHexString().lower() == 'e2e31e1bbc60385749a897fb57703c21a7ae870df3f07d09d8bcf4d8f7c12867';
+    }
+
+    match /portal_data/{bridgeKey}/{collectionName}/{docId} {
+      allow get, list: if hasValidBridgeKey(bridgeKey) && collectionName in [
+        '_meta',
+        'users',
+        'lpse_locations',
+        'agendas',
+        'agenda_registrations',
+        'questions',
+        'bimtek_stages',
+        'attendances',
+        'test_submissions',
+        'evaluations',
+        'document_uploads',
+        'sheet_sync_logs'
+      ];
+      allow create, update, delete: if hasValidBridgeKey(bridgeKey)
+        && isValidId(docId)
+        && collectionName in [
+          '_meta',
+          'users',
+          'lpse_locations',
+          'agendas',
+          'agenda_registrations',
+          'questions',
+          'bimtek_stages',
+          'attendances',
+          'test_submissions',
+          'evaluations',
+          'document_uploads',
+          'sheet_sync_logs'
+        ];
+    }
+  }
+}

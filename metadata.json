@@ -1,0 +1,6 @@
+{
+  "name": "Portal Bimtek LPSE",
+  "description": "Portal manajemen Bimbingan Teknis (Bimtek) terpadu untuk Admin Pengguna, PIC, dan Peserta dengan database PostgreSQL Cloud SQL, upload otomatis ke Google Drive, dan sinkronisasi rekap ke Google Sheets.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
